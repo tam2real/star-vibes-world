@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "sourceSessionId": "7cd42a35-e8fe-49d9-8684-f4bbd68f9bdf",
+  "sourceTurnId": "1f9ec89d-14d8-486f-b85c-014e61682926",
+  "title": "Star Vibes World — Plattsburgh 3D",
+  "serve": {
+    "kind": "static",
+    "entry": "index.html"
+  },
+  "cohubWorkId": "af0c509f-1919-4cc3-a4aa-b50a70174b37",
+  "cohubWorkSlug": "star-vibes-world",
+  "cohubWorkScopes": [
+    "space.view",
+    "session.view",
+    "file.view",
+    "taskrun.view"
+  ],
+  "cohubAllowedViewerScopes": [
+    "session.prompt.readonly"
+  ],
+  "preview": {
+    "kind": "cohub-work",
+    "workId": "af0c509f-1919-4cc3-a4aa-b50a70174b37",
+    "publishedAt": "2026-10-15T13:03:36.064Z",
+    "sourceVersion": "star-vibes-world#sha256:a143ba07d3f2c489234f371d22da8c7d2f1fa879013a179f64bc14cd5e03793a"
+  },
+  "thumbnail": {
+    "status": "failed",
+    "source": "screenshot",
+    "sourceUrl": "https://neta.art/w/af0c509f-1919-4cc3-a4aa-b50a70174b37",
+    "sourceVersion": "star-vibes-world#sha256:a143ba07d3f2c489234f371d22da8c7d2f1fa879013a179f64bc14cd5e03793a",
+    "updatedAt": "2026-10-15T13:04:06.479Z",
+    "error": "Chrome screenshot timed out after 30000ms"
+  }
+}
