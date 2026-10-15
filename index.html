@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Star Vibes World — Plattsburgh, NY</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="description" content="Star Vibes World: an explorable 3D Plattsburgh on Lake Champlain — The Hotspot, Star Vibes Media Production, K Lovee, GloStar and Hotspot Kitchen. Walk, drive, sail and fly.">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<!-- ============ TITLE ============ -->
+<div id="title">
+  <div class="tbg"></div>
+  <div class="tcard">
+    <div class="logo"><span class="star">★</span><div><div class="l1">STAR VIBES</div><div class="l2">WORLD</div></div></div>
+    <div class="loc">PLATTSBURGH, NEW YORK · LAKE CHAMPLAIN</div>
+    <div class="tag">More than entertainment — <em>it's a lifestyle.</em></div>
+    <div class="brands"><span style="--c:#ff3fd0">The Hotspot</span><span style="--c:#ffc65c">Star Vibes Media</span><span style="--c:#ff5c8a">K Lovee</span><span style="--c:#5fe3ff">GloStar</span><span style="--c:#ff9d3d">Hotspot Kitchen</span></div>
+    <div id="loading">Raising the city…</div>
+    <div id="titleBtns" style="display:none">
+      <button id="bNew" class="big"><b>Enter the world</b><small>Arrive at The Hotspot at golden hour</small></button>
+      <button id="bContinue" class="big alt" style="display:none"><b>Continue</b><small></small></button>
+    </div>
+    <div class="keys">
+      <span><kbd>W A S D</kbd> move / drive</span><span><kbd>Drag</kbd> look</span><span><kbd>E</kbd> enter · use</span><span><kbd>V</kbd> garage</span><span><kbd>M</kbd> map</span><span><kbd>C</kbd> camera</span><span><kbd>F</kbd> drone</span><span><kbd>T</kbd> time · <kbd>N</kbd> weather</span>
+    </div>
+    <div class="motto">Real People · Real Culture · Bigger Dreams</div>
+  </div>
+</div>
+<div id="cdnfail"><div><b>STAR VIBES WORLD</b><br><br>The 3D engine couldn't load from cdn.jsdelivr.net.<br>Check your connection or content blockers and reload.</div></div>
+
+<!-- ============ HUD ============ -->
+<div id="hud">
+  <div id="brandbox" class="glass">
+    <div class="lg"><span class="star">★</span> STAR VIBES WORLD <span id="ms" title="Milestones">★ 0/16</span></div>
+    <div id="where">Plattsburgh, NY</div>
+    <div class="ml"><span id="mode">ON FOOT</span><span id="saved">✓ saved</span><span id="fps"></span></div>
+  </div>
+  <div id="timebox" class="glass">
+    <div class="tm"><span id="clock">7:00 PM</span><span id="daypart">Golden hour</span></div>
+    <div class="btns">
+      <button data-time="6.6" title="Sunrise">🌅</button><button data-time="12.5" title="Midday">☀️</button><button data-time="19.15" title="Sunset">🌇</button><button data-time="22.5" title="Night">🌙</button>
+      <span class="sep"></span>
+      <button data-weather="clear" title="Clear">Clear</button><button data-weather="overcast" title="Overcast">Cloudy</button><button data-weather="rain" title="Rain">Rain</button>
+      <span class="sep"></span>
+      <button data-speed="0" title="Pause time">⏸</button><button data-speed="1" title="Real-ish (1 day = 24 min)">1×</button><button data-speed="30" title="Fast">30×</button>
+    </div>
+    <div class="btns r2"><button id="bSound" title="Sound">🔊</button><button id="bHelp" title="Controls (H)">?</button><button id="bSettings" title="Settings">⚙</button></div>
+  </div>
+  <div id="feed" class="glass"><div class="h">LIVE IN PLATTSBURGH</div><div id="feedList"></div></div>
+  <div id="mapbox" class="glass"><canvas id="minimap" width="220" height="220"></canvas></div>
+  <div id="dock" class="glass"></div>
+  <div id="prompt" class="glass"></div>
+  <div id="speedo" class="glass"><div><span id="spd">0</span><small>MPH</small></div><div id="vname"></div></div>
+  <div id="flyBtns"><button id="fUp">▲ Up</button><button id="fDown">▼ Down</button></div>
+  <div id="touchBtns"><button id="tE">E</button><button id="tBoost">Boost</button><button id="tBrake">Brake</button></div>
+  <div id="panel" class="glass"></div>
+  <div id="markers"></div>
+  <div id="help" class="glass">
+    <div class="h">CONTROLS</div>
+    <div><b>W A S D</b>walk · drive · sail · fly</div>
+    <div><b>Mouse drag</b>look around (double-click to lock the mouse)</div>
+    <div><b>Shift</b>sprint · boost</div>
+    <div><b>Space</b>jump · brake · climb (air)</div>
+    <div><b>Ctrl / Q</b>descend (air & drone)</div>
+    <div><b>E</b>enter / exit vehicles, lifts, docks, plots</div>
+    <div><b>C</b>camera: 3rd ↔ 1st person · chase / cockpit / cinematic</div>
+    <div><b>V</b>garage — cars, boats, the Skyline VTOL</div>
+    <div><b>M</b>world map · <b style="min-width:0">1–9</b> fast travel</div>
+    <div><b>F</b>drone camera · <b style="min-width:0">T</b> time · <b style="min-width:0">N</b> weather</div>
+    <div><b>Click</b>a building for its info card</div>
+    <div class="note">Walk onto glowing lift rings inside buildings to change floors. Dashed glowing lots are available plots — walk in and press E to build a business.</div>
+  </div>
+  <div id="tourBar" class="glass"><span>🎬 Cinematic tour</span><button id="tourExit">Exit tour</button></div>
+  <div id="toasts"></div>
+  <div id="modal" class="glass modal"></div>
+  <div id="embed" class="glass"><div class="eh"><span class="t">Operator console</span><button id="embedClose">✕</button></div><iframe title="Operator console" src="about:blank" allow="microphone; camera; clipboard-write"></iframe></div>
+</div>
+<script>setTimeout(function(){ if(!window.__svwBooted){ document.getElementById('cdnfail').style.display='flex'; } }, 60000);</script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
