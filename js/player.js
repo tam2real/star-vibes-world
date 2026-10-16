@@ -8,6 +8,7 @@ import { buildAvatar, walkPose, modePose } from './people.js';
 import { BRANDS } from './brands.js';
 import { MARINA } from './town.js';
 import { env } from './env.js';
+import { operatorAt, operatorById } from './operators.js';
 
 export const P = {
   mode: 'walk',              // walk | car | boat | fly | drone | tour
@@ -19,7 +20,7 @@ export const P = {
 };
 export const keys = new Set();
 const avatar = buildAvatar();
-export const events = { onEnterVehicle: null, onExitVehicle: null, toast: null, liftMenu: null, plotMenu: null, bizMenu: null, inspect: null, milestone: null };
+export const events = { onEnterVehicle: null, onExitVehicle: null, toast: null, liftMenu: null, plotMenu: null, bizMenu: null, inspect: null, operatorInspect: null, milestone: null };
 
 /* =====================================================================
    INPUT
@@ -138,6 +139,10 @@ function leaveBoat() { }
 export function nearestInteract() {
   if (P.mode !== 'walk') return null;
   let best = null, bd = 1e9; const p = P.pos;
+  for (const [id, q] of Object.entries(operatorAt)) {
+    const d = Math.hypot(p.x - q.x, p.z - q.z);
+    if (d < 2.8 && Math.abs(p.y - q.y) < 3 && d < bd) { const op = operatorById(id); best = { label: `Talk to ${op.name}`, sub: `${op.role} · ${op.work}`, action: { kind: 'operator', operatorId: id } }; bd = d; }
+  }
   for (const it of interactables) { const d = Math.hypot(p.x - it.x, p.z - it.z); if (d < it.r && Math.abs(p.y - it.y) < 3 && d < bd) { bd = d; best = it; } }
   const cand = [];
   if (P.car) cand.push([Math.hypot(p.x - P.car.x, p.z - P.car.z), { label: `Drive your ${CARS[P.car.type].code} ${CARS[P.car.type].name}`, action: { kind: 'enterCar' } }, 4.2]);
@@ -152,6 +157,7 @@ export function interact() {
   if (P.mode === 'drone') { toggleDrone(); return; }
   const it = nearestInteract(); if (!it) return;
   const a = it.action;
+  if (a.kind === 'operator') { events.operatorInspect && events.operatorInspect(a.operatorId); return; }
   if (a.kind === 'enterCar') enterCar();
   else if (a.kind === 'enterBoat') enterBoat();
   else if (a.kind === 'enterFly') enterFly();
@@ -163,6 +169,33 @@ export function interact() {
   else if (a.kind === 'biz') events.bizMenu && events.bizMenu(a.rec);
 }
 export function useLift(a, level) { const [x, z] = a.site.w(a.lx, a.lz + 1.6); P.pos.set(x, level.y + 0.02, z); P.vy = 0; P.vel.set(0, 0, 0); P.liftFx = 1; }
+export function enterBuilding(s) {
+  const b = BRANDS[s.id];
+  if (!b) return;
+  const [dx, dz] = b.door, cx = b.site.x, cz = b.site.z;
+  const ang = Math.atan2(dx - cx, dz - cz);
+  // Doors are stored just outside the facade. Find the first usable point
+  // along the inward axis rather than assuming every floor plan is identical.
+  // This keeps the landing point on a registered interior floor and clear of
+  // the facade/interior wall colliders.
+  let landing = null;
+  for (const distance of [4, 5, 6, 7, 8, 9, 10, 12]) {
+    const x = dx - Math.sin(ang) * distance, z = dz - Math.cos(ang) * distance;
+    const g = groundAt(x, z, 3);
+    if (g.y <= -1e8 || g.water) continue;
+    if (pointBlocked(x, g.y + 1.0, z, 0.28)) continue;
+    landing = { x, y: g.y, z };
+    break;
+  }
+  if (!landing) {
+    events.toast && events.toast('The entrance is unavailable right now', '#ff5c8a');
+    return;
+  }
+  const { x: inX, y, z: inZ } = landing;
+  const from = camera.position.clone(), fq = camera.quaternion.clone();
+  const endPos = new V3(inX, y, inZ);
+  P.transition = { t: 0, dur: 1.8, from, fq, to: endPos, face: ang + Math.PI, ctrl: from.clone().lerp(endPos, 0.5).setY(Math.max(from.y, 40) + from.distanceTo(endPos) * 0.15), look: new V3(inX, y + 1.8, inZ) };
+}
 function cycleCamera() {
   if (P.mode === 'walk') { P.view = P.view === 'third' ? 'first' : 'third'; avatar.visible = P.view === 'third'; events.toast && events.toast(P.view === 'third' ? 'Third-person view' : 'First-person view'); }
   else if (['car', 'boat', 'fly'].includes(P.mode)) { P.camMode = (P.camMode + 1) % 4; events.toast && events.toast(['Chase cam', 'Far chase', P.mode === 'car' ? 'Cockpit' : 'Bow cam', 'Cinematic'][P.camMode]); }
@@ -261,7 +294,17 @@ export function updatePlayer(dt, time) {
     camera.position.set(u * u * tr.from.x + 2 * u * e * tr.ctrl.x + e * e * eye.x, u * u * tr.from.y + 2 * u * e * tr.ctrl.y + e * e * eye.y, u * u * tr.from.z + 2 * u * e * tr.ctrl.z + e * e * eye.z);
     const q1 = new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().lookAt(camera.position, e > 0.6 ? tr.to.clone().add(new V3(Math.sin(tr.face) * 10, 3, Math.cos(tr.face) * 10)) : tr.look, new V3(0, 1, 0)));
     camera.quaternion.slerpQuaternions(tr.fq, q1, Math.min(1, e * 1.2));
-    if (t >= 1) { P.transition = null; P.pos.copy(tr.to); P.yaw = tr.face; P.pitch = -0.08; setMode('walk'); }
+    if (t >= 1) {
+      P.transition = null;
+      P.pos.copy(tr.to);
+      P.lastSafe.copy(tr.to);
+      P.vel.set(0, 0, 0);
+      P.vy = 0;
+      P.onGround = true;
+      P.yaw = tr.face;
+      P.pitch = -0.08;
+      setMode('walk');
+    }
     return;
   }
   if (P.mode === 'tour') {
