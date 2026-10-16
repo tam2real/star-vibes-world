@@ -12,6 +12,21 @@
   "three/addons/": "./vendor/three/addons/"
 } }
 </script>
+<script>
+window.__svwErrors = [];
+window.addEventListener('error', function(e) {
+  var msg = (e.message || 'unknown error') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '');
+  window.__svwErrors.push(msg);
+  var el = document.getElementById('loading');
+  if (el) { el.style.color = '#ff5c5c'; el.textContent = 'Error: ' + msg; }
+}, true);
+window.addEventListener('unhandledrejection', function(e) {
+  var msg = 'promise: ' + (e.reason && e.reason.message ? e.reason.message : e.reason);
+  window.__svwErrors.push(msg);
+  var el = document.getElementById('loading');
+  if (el) { el.style.color = '#ff5c5c'; el.textContent = 'Error: ' + msg; }
+});
+</script>
 </head>
 <body>
 <canvas id="c"></canvas>
