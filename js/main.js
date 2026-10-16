@@ -7,6 +7,9 @@ import { BRANDS } from './brands.js';
 import './growth.js';
 import './vehicles.js';
 import './people.js';
+import './operators.js';
+import { setOperatorDestination, clearOperatorDestination, getOperatorState, setOperatorVehicle, clearOperatorVehicle } from './operators.js';
+import { OPERATOR_AUTOMATION_DOMAINS } from './operators.js';
 import { P, startTour, travelTo, setMode, keys } from './player.js';
 import * as PHYS from './physics.js';
 import { restore, persist, log, refreshWx, checkMilestones, toast } from './hud.js';
@@ -14,6 +17,7 @@ import { save } from './save.js';
 import { startAudio, audio } from './audio.js';
 import { updateScreens } from './kit.js';
 import { BUSINESS_API } from './api.js';
+import { sendOperatorMessage, registerOperatorStation, listAutomations, listSkills, listTools, listSkillPackages, listOperatorStations, listCapabilityCatalog, resolveCapability, listOperatorTasks, getOperatorTask, createOperatorTask, createOperatorHandoff, startRiftResearchWorkflow, runRoutine, runWorkflow, getElfieSettings, createOperatorChat, sendOperatorRequest, operatorRuntime } from './operator-bridge.js';
 
 const $ = id => document.getElementById(id);
 const clock = new THREE.Clock();
@@ -57,4 +61,4 @@ function enter(fromSave) {
 }
 $('bNew').onclick = () => enter(false);
 $('bContinue').onclick = () => enter(true);
-window.StarVibes = { env, BRANDS, P, scene, camera, ...BUSINESS_API, setWeather, travelTo, _keys: keys, _phys: PHYS, _renderer: renderer, _step: (n = 60, dt = 1 / 30) => { let t = clock.elapsedTime; for (let i = 0; i < n; i++) { t += dt; for (const u of updaters) u(dt, t); } } };
+window.StarVibes = { env, BRANDS, P, scene, camera, ...BUSINESS_API, OPERATOR_AUTOMATION_DOMAINS, operatorRuntime, sendOperatorMessage, registerOperatorStation, listAutomations, listSkills, listTools, listSkillPackages, listOperatorStations, listCapabilityCatalog, resolveCapability, listOperatorTasks, getOperatorTask, createOperatorTask, createOperatorHandoff, startRiftResearchWorkflow, runRoutine, runWorkflow, getElfieSettings, createOperatorChat, sendOperatorRequest, setOperatorDestination, clearOperatorDestination, getOperatorState, setOperatorVehicle, clearOperatorVehicle, setWeather, travelTo, _keys: keys, _phys: PHYS, _renderer: renderer, _step: (n = 60, dt = 1 / 30) => { let t = clock.elapsedTime; for (let i = 0; i < n; i++) { t += dt; for (const u of updaters) u(dt, t); } } };
