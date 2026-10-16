@@ -141,10 +141,10 @@ updaters.push((dt, t) => { updateWalkers(dt, t); updateSpots(t); });
 /* =====================================================================
    PLAYER AVATAR (third-person)
    ===================================================================== */
-export function buildAvatar() {
+export function buildAvatar(opts = {}) {
   const g = new THREE.Group();
-  const jacket = new THREE.MeshStandardMaterial({ color: 0x14121c, roughness: 0.4, metalness: 0.3 });
-  const neon = new THREE.MeshBasicMaterial({ color: new THREE.Color('#ffc65c').multiplyScalar(2.4) });
+  const jacket = new THREE.MeshStandardMaterial({ color: opts.color || 0x14121c, roughness: 0.4, metalness: 0.3 });
+  const neon = new THREE.MeshBasicMaterial({ color: new THREE.Color(opts.accent || '#ffc65c').multiplyScalar(2.4) });
   const skin = new THREE.MeshStandardMaterial({ color: 0xc68863, roughness: 0.7 }), pants = new THREE.MeshStandardMaterial({ color: 0x1e2028, roughness: 0.8 }), shoes = new THREE.MeshStandardMaterial({ color: 0xf4f4f4, roughness: 0.5 });
   const parts = {};
   const torso = new THREE.Group(); torso.position.y = 0.92; g.add(torso); parts.torso = torso;
