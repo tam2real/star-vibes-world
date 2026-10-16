@@ -69,7 +69,7 @@ const FANS = ['#ff4fa3', '#ffffff', '#1a1a1a', '#ffc65c', '#5fe3ff', '#b46bff', 
    ===================================================================== */
 {
   const L = BRAND_LOTS.hotspot, s = new Site(L.x, L.z, L.rot), RX = 46, RZ = 34, H = 25;
-  const brand = registerBrand({ id: 'hotspot', name: 'The Hotspot', tagline: 'Music · Culture · Discovery · Entertainment', color: '#ff3fd0', district: 'downtown', hours: [16, 2], site: s,
+  const brand = registerBrand({ id: 'hotspot', op: 'vector', name: 'The Hotspot', tagline: 'Music · Culture · Discovery · Entertainment', color: '#ff3fd0', district: 'downtown', hours: [16, 2], site: s,
     about: ['The main venue and centrepiece of Star Vibes World.', 'Concert hall · balcony ring · rooftop terrace.', 'Tonight: K Lovee — Champlain Nights Tour.'], door: s.w(0, RZ + 10), dropoff: s.w(-30, RZ + 22), floorsInfo: 'Concert floor · Balcony (L2) · Rooftop (L3)' });
   const kit = new Kit(s, gateOf('hotspot'));
   // floor
@@ -242,7 +242,7 @@ const FANS = ['#ff4fa3', '#ffffff', '#1a1a1a', '#ffc65c', '#5fe3ff', '#b46bff', 
    ===================================================================== */
 {
   const L = BRAND_LOTS.klovee, s = new Site(L.x, L.z, L.rot), W = 40, D = 30, H1 = 6.5, H2 = 5.2;
-  const brand = registerBrand({ id: 'klovee', name: 'K Lovee', tagline: 'Artist · Music releases · Fan meets · Merch', color: '#ff5c8a', district: 'downtown', hours: [11, 1], site: s,
+  const brand = registerBrand({ id: 'klovee', op: 'echo', name: 'K Lovee', tagline: 'Artist · Music releases · Fan meets · Merch', color: '#ff5c8a', district: 'downtown', hours: [11, 1], site: s,
     about: ['K Lovee\'s home base: intimate stage, release listening room and merch.', 'New single “Lakefront Heat” — out now.', 'Fan meet & signing every evening.'], door: s.w(0, D / 2 + 3), dropoff: s.w(0, D / 2 + 30), floorsInfo: 'Stage & merch · VIP listening lounge (L2) · Rooftop' });
   const kit = new Kit(s, gateOf('klovee'));
   const F2 = Y0 + H1, ROOF = F2 + H2;
@@ -338,7 +338,7 @@ const FANS = ['#ff4fa3', '#ffffff', '#1a1a1a', '#ffc65c', '#5fe3ff', '#b46bff', 
    ===================================================================== */
 {
   const L = BRAND_LOTS.glostar, s = new Site(L.x, L.z, L.rot), W = 44, D = 32, FH = 4.8, N = 3;
-  const brand = registerBrand({ id: 'glostar', name: 'GloStar', tagline: 'Creator education · Courses · Workshops · Co-working', color: '#5fe3ff', district: 'downtown', hours: [8, 22], site: s,
+  const brand = registerBrand({ id: 'glostar', op: 'omnis', name: 'GloStar', tagline: 'Creator education · Courses · Workshops · Co-working', color: '#5fe3ff', district: 'downtown', hours: [8, 22], site: s,
     about: ['Where creators level up.', 'Co-working lobby · two classrooms · mentoring pods & creator studio.', 'Today: “Build Your Brand 101” and “Video Editing Masterclass”.'], door: s.w(0, D / 2 + 3), dropoff: s.w(-12, D / 2 + 30), floorsInfo: 'Co-working (L1) · Classrooms (L2) · Mentoring & studio (L3) · Roof' });
   const kit = new Kit(s, gateOf('glostar'));
   const lv = i => Y0 + i * FH;
@@ -406,7 +406,7 @@ const FANS = ['#ff4fa3', '#ffffff', '#1a1a1a', '#ffc65c', '#5fe3ff', '#b46bff', 
    ===================================================================== */
 {
   const L = BRAND_LOTS.kitchen, s = new Site(L.x, L.z, L.rot), W = 40, D = 24, H = 6.2;
-  const brand = registerBrand({ id: 'kitchen', name: 'Hotspot Kitchen', tagline: 'Food · Lifestyle · Cooking studio · Recipes', color: '#ff9d3d', district: 'river', hours: [7, 23], site: s,
+  const brand = registerBrand({ id: 'kitchen', op: 'guardian', name: 'Hotspot Kitchen', tagline: 'Food · Lifestyle · Cooking studio · Recipes', color: '#ff9d3d', district: 'river', hours: [7, 23], site: s,
     about: ['Warm, open kitchen on the Saranac riverwalk.', 'Dining room · live cooking studio · string-lit patio.', 'Tonight: maple-glazed salmon & wood-fired flatbreads.'], door: s.w(0, -D / 2 - 3), dropoff: s.w(0, -D / 2 - 16), floorsInfo: 'Dining room · Open kitchen · Cooking studio · River patio' });
   const kit = new Kit(s, gateOf('kitchen'));
   slab(s, W, D, 0, Y0 + 0.04, 0, floorWood, 0.1);
@@ -476,7 +476,7 @@ function flamesAt(site, x, y, z, n = 1) { for (let i = 0; i < n; i++) { const a 
 export const posterTex = { aerial: loadTex('assets/aerial.jpg'), concept: loadTex('assets/concept.jpg') };
 {
   const L = BRAND_LOTS.starvibes, s = new Site(L.x, L.z, L.rot), W = 64, D = 46, FH = 6;
-  const brand = registerBrand({ id: 'starvibes', name: 'Star Vibes Media Production', tagline: 'Film · Recording · Production — the creative heart', color: '#ffc65c', district: 'waterfront', hours: [0, 24], site: s,
+  const brand = registerBrand({ id: 'starvibes', op: 'echo', name: 'Star Vibes Media Production', tagline: 'Film · Recording · Production — the creative heart', color: '#ffc65c', district: 'waterfront', hours: [0, 24], site: s,
     about: ['HQ of the whole ecosystem, on the Lake Champlain waterfront.', 'Sound stage · recording studios · screening room · production offices.', 'Rooftop helipad with the Star Vibes neon.'], door: s.w(0, D / 2 + 3), dropoff: s.w(14, D / 2 + 30), floorsInfo: 'Lobby · Sound Stage · Studios A/B · Screening room · Offices (L2) · Roof' });
   const kit = new Kit(s, gateOf('starvibes'));
   const F2 = Y0 + FH, ROOF = Y0 + FH * 2;
@@ -581,7 +581,7 @@ export const posterTex = { aerial: loadTex('assets/aerial.jpg'), concept: loadTe
 export const GARAGE = { turntables: [] };
 {
   const L = BRAND_LOTS.garage, s = new Site(L.x, L.z, L.rot), W = 52, D = 30, H = 8;
-  const brand = registerBrand({ id: 'garage', name: 'Star Vibes Garage', tagline: 'Showroom · Customization bay · Storage', color: '#b46bff', district: 'downtown', hours: [0, 24], site: s,
+  const brand = registerBrand({ id: 'garage', op: 'forge', name: 'Star Vibes Garage', tagline: 'Showroom · Customization bay · Storage', color: '#b46bff', district: 'downtown', hours: [0, 24], site: s,
     about: ['The whole Star Vibes fleet, on turntables.', 'Walk up to any car and press E to take it — or open Garage (V) anywhere.', 'Customization: paint, underglow, wheels.'], door: s.w(0, D / 2 + 3), dropoff: s.w(0, D / 2 + 10), floorsInfo: 'Showroom · Customization bay' });
   const kit = new Kit(s, gateOf('garage'));
   slab(s, W, D, 0, Y0 + 0.04, 0, floorDark, 0.1);
